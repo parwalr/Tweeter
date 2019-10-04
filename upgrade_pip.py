@@ -3,8 +3,6 @@ import os
 import pip
 from subprocess import call
 
-# joincfe.com/blog/
-# joincfe.com/blog/upgrade-all-pip-python-packages-store-an-archive/
 
 def get_outdated():
     list_command = pip.commands.list.ListCommand()
@@ -20,7 +18,8 @@ def upgrade_oudated(all_pkgs=False):
     else:
         to_upgrade = get_outdated()
     for dist in to_upgrade:
-        call("pip install --upgrade {pack_name}".format(pack_name=dist.project_name), shell=True)
+        call(
+            "pip install --upgrade {pack_name}".format(pack_name=dist.project_name), shell=True)
         packages_upgraded.append(dist.project_name)
 
     if len(packages_upgraded) > 0:
@@ -28,8 +27,6 @@ def upgrade_oudated(all_pkgs=False):
         for pkg in packages_upgraded:
             print(" - " + str(pkg))
         print("\n")
-
-# upgrade_oudated()
 
 
 def set_archive_filepath(requirements_path, filepath=None, item=0):
@@ -39,11 +36,11 @@ def set_archive_filepath(requirements_path, filepath=None, item=0):
         if item >= 0:
             item += 1
         today = str(datetime.date.today())
-        base_filepath = os.path.join(requirements_path, "archive__%s__%i.txt" %(today, item))
+        base_filepath = os.path.join(
+            requirements_path, "archive__%s__%i.txt" % (today, item))
     if os.path.exists(base_filepath):
         return set_archive_filepath(requirements_path, filepath=base_filepath, item=item)
     return base_filepath
-
 
 
 def save_archive(archive_list):
@@ -57,11 +54,11 @@ def save_archive(archive_list):
             archive.write(str(rq) + "\n")
     print("Archive done")
 
+
 def make_archive():
     print("Making archive...")
     current = get_packages()
     save_archive(current)
-
 
 
 def get_packages(upgrade=False):
@@ -73,7 +70,6 @@ def get_packages(upgrade=False):
         else:
             current.append(str(dist.as_requirement()))
     return current
-
 
 
 def get_requirements_location(next_to=None):
@@ -88,9 +84,10 @@ def get_requirements_location(next_to=None):
 
 
 def save_requirements(next_to='manage.py'):
-    packages  = get_packages()
+    packages = get_packages()
     print("Saving requirements.txt")
-    location = get_requirements_location(next_to=next_to) # os.path.join(os.getcwd(), "requirements.txt")
+    # os.path.join(os.getcwd(), "requirements.txt")
+    location = get_requirements_location(next_to=next_to)
     if location is None:
         location = os.path.join(os.getcwd(), "requirements.txt")
     with open(location, "w") as f:
@@ -98,15 +95,6 @@ def save_requirements(next_to='manage.py'):
             f.write(str(pkg) + "\n")
 
 
-
-
 make_archive()
 upgrade_oudated(all_pkgs=False)
 save_requirements()
-
-
-
-
-
-
-
